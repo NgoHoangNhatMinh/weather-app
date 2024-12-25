@@ -1,12 +1,12 @@
 const API_KEY = "C5YZ53NHBC6CU7VK5DA88DER7";
 const form = document.querySelector("form");
+const weather = document.querySelector(".weather");
 
 async function getWeatherData(location) {
     const API_URL =  "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/" + location + "?key=" + API_KEY;
     const response = await fetch(API_URL, {mode: 'cors'});
     const weatherData = await response.json(); 
     const displayedData = processData(weatherData);
-    console.log(displayedData);
 
     return displayedData;
 }
@@ -29,8 +29,29 @@ function processData(data) {
     }
 }
 
-function displayWeather() {
+async function displayWeather(data) {
+    const displayedData = await data;
 
+    weather.textContent = "";
+
+    const address = document.createElement("p");
+    address.textContent = "Address: " + displayedData.address;
+
+    const time = document.createElement("p");
+    time.textContent = "Time: " + displayedData.time;
+
+    const temp = document.createElement("p");
+    temp.textContent = "Temperature: " + displayedData.temp;
+
+    const humidity = document.createElement("p");
+    humidity.textContent = "Humidity: " + displayedData.humidity;
+
+    weather.appendChild(address);
+    weather.appendChild(time);
+    weather.appendChild(temp);
+    weather.appendChild(humidity);
+
+    console.log(displayedData);
 }
 
 // getWeatherData("United States");
@@ -40,10 +61,7 @@ form.addEventListener("submit", (e) => {
 
     const location = document.querySelector("#location").value;
 
-    // This data is a promise;
+    // This is a promise;
     const data = getWeatherData(location);
-
-    console.log(location);
-
-    console.log(data);
+    displayWeather(data);
 })
